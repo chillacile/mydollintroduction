@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#286257">
+  <title>ドール紹介 · Dollfolio</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="i18n.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-start"><nav id="language-switcher" class="language-switcher" data-i18n-aria="languageNav" aria-label="表示言語"></nav><div class="brand"><span class="brand-mark" aria-hidden="true">✳</span><div><h1><b data-i18n="brand">ドール紹介</b><span>DOLLFOLIO</span></h1><p data-i18n="tagline">大切なドールたちを、一枚の紹介画像に。</p></div></div></div>
+    <div class="header-actions"><button id="open-project" data-i18n="openProject">プロジェクトを開く</button><button id="save-project" data-i18n="saveProject">プロジェクトを保存</button><button id="export" class="primary"><span data-i18n="exportPng">PNGを書き出す</span> <span aria-hidden="true">↗</span></button></div>
+  </header>
+
+  <main>
+    <section class="settings-panel" aria-labelledby="settings-title">
+      <div class="section-heading"><h2 id="settings-title" data-i18n="settingsTitle">キャンバスとレイアウト</h2><span data-i18n="instantPreview">変更をすぐにプレビュー</span></div>
+      <div class="settings-grid">
+        <fieldset><legend data-i18n="gridLegend">01 / グリッド</legend><div class="field-pair"><label><span data-i18n="columns">列数</span><input id="columns" type="number" min="1" max="12" value="3"></label><label><span data-i18n="rows">行数</span><input id="rows" type="number" min="1" max="12" value="3"></label></div></fieldset>
+        <fieldset><legend data-i18n="sizeLegend">02 / 出力サイズ · px</legend><div class="field-pair"><label><span data-i18n="width">幅</span><input id="width" type="number" min="256" max="8192" step="1" value="4096"></label><label><span data-i18n="height">高さ</span><input id="height" type="number" min="256" max="8192" step="1" value="4096"></label></div></fieldset>
+        <fieldset><legend data-i18n="scaleLegend">03 / コンテンツの拡大縮小</legend><label class="range-label"><span data-i18n="imageScale">写真</span><output id="image-scale-value">85%</output><input id="image-scale" type="range" min="25" max="100" value="85"></label><label class="range-label"><span data-i18n="textScale">文字</span><output id="text-scale-value">100%</output><input id="text-scale" type="range" min="50" max="200" value="100"></label></fieldset>
+        <fieldset><legend data-i18n="appearanceLegend">04 / 画像のスタイル</legend><div class="field-pair"><label><span data-i18n="background">背景</span><input id="background" type="color" value="#fffdf8"></label><label><span data-i18n="foreground">文字色</span><input id="foreground" type="color" value="#313c36"></label></div><label class="check-label"><input id="transparent" type="checkbox"><span data-i18n="transparent">背景を透明にする</span></label></fieldset>
+      </div>
+      <div class="typography"><label class="line-count"><span data-i18n="lineCount">紹介文の行数</span><input id="line-count" type="number" min="1" max="8" value="3"></label><div id="line-styles" class="line-styles"></div></div>
+    </section>
+
+    <div class="workspace">
+      <aside class="editor-panel" aria-labelledby="editor-title">
+        <div class="section-heading"><h2 id="editor-title"><span data-i18n="editorTitle">マイドール</span> <span id="count" class="count">0 / 9</span></h2><button id="add" class="primary small" data-i18n="addPhoto">＋ 写真を追加</button></div>
+        <p class="helper" data-i18n="editorHelp">写真1枚につきドール1体。空きマスへ順番に追加されます。</p>
+        <div id="doll-list"></div>
+        <button id="empty-add" class="empty-add"><span aria-hidden="true">＋</span><strong data-i18n="emptyAddTitle">最初のドールを追加</strong><span data-i18n="emptyAddHelp">写真を選んで、紹介文を入力しましょう</span><small data-i18n="supportedImages">JPG・PNG・WebPなどに対応</small></button>
+        <p id="capacity-message" class="helper" aria-live="polite"></p>
+      </aside>
+
+      <section class="preview-panel" aria-labelledby="preview-title">
+        <div class="section-heading"><h2 id="preview-title"><span data-i18n="previewTitle">プレビュー</span> <span class="live-dot" aria-hidden="true"></span></h2><span id="dimensions">4096 × 4096 px</span></div>
+        <div class="preview-toolbar"><span data-i18n="dragHelp">ドールをドラッグして位置を入れ替え</span><label class="check-label"><input id="show-grid" type="checkbox" checked><span data-i18n="showGrid">ガイドを表示</span></label></div>
+        <div class="preview-mat"><div id="board" class="board"><canvas id="preview" data-i18n-aria="previewAria" aria-label="ドール紹介画像のプレビュー"></canvas><div id="grid" class="grid" role="group" data-i18n-aria="gridAria" aria-label="ドールの位置。ドラッグ、または2つのマスを順に選んで入れ替え。"></div><div id="preview-empty" class="preview-empty"><span aria-hidden="true">✳</span><strong data-i18n="previewEmptyTitle">大切なドールたちを、一枚に</strong><p data-i18n="previewEmptyHelp">左側から写真を追加すると、ここに紹介が並びます。</p></div></div></div>
+        <div class="preview-footer"><span id="selection-hint"></span><span data-i18n="previewResolution">プレビューは縮小表示・出力は設定サイズ</span></div>
+      </section>
+    </div>
+    <footer class="app-footer" data-i18n="footer">写真はブラウザ内で処理されます。プロジェクトを保存すれば、後から編集を再開できます。</footer>
+  </main>
+
+  <input id="photo-input" type="file" accept="image/*" multiple hidden>
+  <input id="project-input" type="file" accept=".json,application/json" hidden>
+  <dialog id="crop-dialog" aria-labelledby="crop-title">
+    <form method="dialog" id="crop-form">
+      <div class="section-heading"><div><h2 id="crop-title" data-i18n="cropTitle">写真をトリミング</h2><p class="helper" data-i18n="cropHelp">写真をドラッグして位置を調整。スライダーやホイールで拡大縮小。</p></div><button value="cancel" class="icon-button" data-i18n-aria="cancelCrop" aria-label="トリミングをキャンセル">×</button></div>
+      <div class="crop-shapes"><label><input type="radio" name="shape" value="circle" checked><span data-i18n="circle">円形</span></label><label><input type="radio" name="shape" value="square"><span data-i18n="square">正方形</span></label></div>
+      <canvas id="crop-canvas" width="480" height="480" data-i18n-aria="cropAria" aria-label="トリミング領域。矢印キーで写真を移動できます" tabindex="0"></canvas>
+      <label class="range-label crop-zoom-label"><span data-i18n="zoom">倍率</span><output id="crop-zoom-value">100%</output><input id="crop-zoom" type="range" min="1" max="5" step="0.01" value="1"></label>
+      <div class="dialog-actions"><button type="button" id="reset-crop" data-i18n="resetCrop">位置をリセット</button><button value="cancel" data-i18n="cancel">キャンセル</button><button id="confirm-crop" type="button" class="primary" data-i18n="confirmCrop">トリミングを確定</button></div>
+    </form>
+  </dialog>
+  <dialog id="replace-dialog" aria-labelledby="replace-title">
+    <form method="dialog"><h2 id="replace-title" data-i18n="replaceTitle">プロジェクトを開きますか？</h2><p class="helper" data-i18n="replaceHelp">現在の内容が置き換わります。必要な場合は、先に現在のプロジェクトを保存してください。</p><div class="dialog-actions"><button value="cancel" data-i18n="cancel">キャンセル</button><button value="open" class="primary" data-i18n="continueOpen">開く</button></div></form>
+  </dialog>
+  <div id="status" class="status" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
